@@ -13,6 +13,21 @@ const Hero = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
 
+  const getVideoSrc = (index) => {
+    return `videos/hero-${index}.mp4`;
+  };
+
+  useEffect(() => {
+    const preload = (index) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "video";
+      link.href = getVideoSrc(index);
+      document.head.appendChild(link);
+    };
+    preload(1);
+  }, []);
+
   const totalVideos = 4;
 
   const nextVdRef = useRef(null);
@@ -29,10 +44,10 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    if (loadedVideos === totalVideos - 1) {
+    if (loadedVideos >= 1) {
       setIsLoading(false);
     }
-  }, [loadedVideos, totalVideos]);
+  }, [loadedVideos]);
 
   useGSAP(
     () => {
@@ -79,10 +94,6 @@ const Hero = () => {
       },
     });
   });
-
-  const getVideoSrc = (index) => {
-    return `videos/hero-${index}.mp4`;
-  };
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
